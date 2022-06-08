@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
+import Card from "../components/card";
 
 export default function Home() {
   const handleOnButtonClick = () => {
@@ -27,6 +28,7 @@ export default function Home() {
           buttonText={"View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
+        <Card />
       </main>
     </div>
   );
