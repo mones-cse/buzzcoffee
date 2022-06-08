@@ -28,7 +28,10 @@ export default function Home() {
           buttonText={"View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
-        <Card />
+        <div className={styles.cardLayout}>
+          <Card className={styles.card} />
+          <Card className={styles.card} />
+        </div>
       </main>
     </div>
   );
