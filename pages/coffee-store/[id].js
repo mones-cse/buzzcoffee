@@ -1,27 +1,28 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import result from "../../data/coffee-stores.json";
 import Image from "next/image";
 import Head from "next/head";
 import style from "./coffee-store.module.css";
 import className from "classnames";
+import { fetchStore } from "../../lib/coffee-store";
 
 export async function getStaticProps({ params }) {
-  console.log({ params });
-  const store = result.find((eachStore) => eachStore.id == params.id);
-  console.log({ store });
+  const formattedData = await fetchStore();
+  const store = formattedData.find((eachStore) => eachStore.id == params.id);
   return { props: { store } };
 }
 
 export async function getStaticPaths() {
-  const paths = result.map((each) => {
+  const formattedData = await fetchStore();
+  const paths = formattedData.map((each) => {
     return {
       params: {
         id: each.id.toString(),
       },
     };
   });
+  console.log({ paths });
   return {
     paths,
     fallback: true,
@@ -54,7 +55,10 @@ const CoffeeStore = ({ store }) => {
             <h2>{name}</h2>
           </div>
           <Image
-            src={imgUrl}
+            src={
+              imgUrl ||
+              "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+            }
             width={600}
             height={360}
             className={style.storeImg}
