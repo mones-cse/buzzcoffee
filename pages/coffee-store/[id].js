@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import result from "../../data/coffee-stores.json";
 import Image from "next/image";
+import Head from "next/head";
 
 export async function getStaticProps({ params }) {
   console.log({ params });
@@ -12,28 +13,42 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
+  const paths = result.map((each) => {
+    return {
+      params: {
+        id: each.id.toString(),
+      },
+    };
+  });
   return {
-    paths: [
-      { params: { id: "0", val: "0" } },
-      { params: { id: "1", val: "1" } },
-    ],
-    fallback: false,
+    paths,
+    fallback: true,
   };
 }
 
-const CoffeeStore = (props) => {
-  console.log({ props });
+const CoffeeStore = ({ store }) => {
+  const { name, address, neighbourhood, imgUrl } = store;
+  const router = useRouter();
+  if (router.isFallback == true) {
+    return <div>Loading....</div>;
+  }
+
   return (
     <div>
+      <Head>
+        <title>{name}</title>
+      </Head>
       <Link href={"/"}>
         <a>
           <h2>Go back Home </h2>
         </a>
       </Link>
-      <h2>{props.store.name}</h2>
-      <p>{props.store.address}</p>
-      <Image src={props.store.imgUrl} width={500} height={400} />
+      <h2>{name}</h2>
+      <p>{address}</p>
+      <p>{neighbourhood}</p>
+      <Image src={imgUrl} width={500} height={400} />
     </div>
   );
 };
+
 export default CoffeeStore;
