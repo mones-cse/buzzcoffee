@@ -4,19 +4,20 @@ import Link from "next/link";
 import style from "./card.module.css";
 import classNames from "classnames";
 
-const Card = () => {
+const Card = (props) => {
+  console.log({ props });
   return (
-    <Link href={"/asd"}>
+    <Link href={`/coffee-store/${props.url}`}>
       <a className={style.cardLink}>
         {/*<div className={style.container}>*/}
         <div className={classNames("glass", style.container)}>
           <div className={style.cardHeaderWrapper}>
-            <h2 className={style.cardHeader}>Title</h2>
+            <h2 className={style.cardHeader}>{props.title}</h2>
           </div>
           <div className={style.cardImageWrapper}>
             <Image
               className={style.cardImage}
-              src={"/static/hero-image.png"}
+              src={props.imgUrl}
               width={260}
               height={160}
             />

@@ -3,8 +3,8 @@ const Banner = (props) => {
   return (
     <div className={style.container}>
       <h1 className={style.title}>
-        <span className={style.title1}>Coffee</span>
-        <span className={style.title2}>Connoisseur</span>
+        <span className={style.title1}>Buzz</span>
+        <span className={style.title2}>Coffee</span>
       </h1>
       <p className={style.subtitle}>Discover your local store</p>
       <div className={style.buttonWrapper}>
