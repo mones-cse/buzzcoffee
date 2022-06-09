@@ -5,7 +5,6 @@ import style from "./card.module.css";
 import classNames from "classnames";
 
 const Card = (props) => {
-  console.log({ props });
   return (
     <Link href={`/coffee-store/${props.url}`}>
       <a className={style.cardLink}>

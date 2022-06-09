@@ -5,7 +5,14 @@ import Banner from "../components/banner";
 import Card from "../components/card";
 import result from "../data/coffee-stores.json";
 
-export default function Home() {
+export async function getStaticProps(context) {
+  console.log("this only works on server");
+  return {
+    props: { storeData: result }, // will be passed to the page component as props
+  };
+}
+
+export default function Home(props) {
   const handleOnButtonClick = () => {
     console.log("hi button click");
   };
@@ -29,7 +36,7 @@ export default function Home() {
           handleOnClick={handleOnButtonClick}
         />
         <div className={styles.cardLayout}>
-          {result.map((each) => {
+          {props.storeData.map((each) => {
             return (
               <Card
                 className={styles.card}
