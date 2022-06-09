@@ -3,42 +3,10 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
 import Card from "../components/card";
-import result from "../data/coffee-stores.json";
+import { fetchStore } from "../lib/coffee-store";
 
 export async function getStaticProps(context) {
-  const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY || "";
-  const ll = "23.73,90.37";
-  const query = "coffee";
-  const limit = 6;
-  const url = `https://api.foursquare.com/v3/places/search?ll=${ll}&query=${query}&limit=${limit}`;
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-      Authorization: apiKey,
-    },
-  });
-  let formattedData = [];
-
-  if (response.ok) {
-    const data = await response.json();
-
-    formattedData = data.results.map((eachData) => {
-      return {
-        id: eachData.fsq_id,
-        name: eachData.name,
-        address: eachData.location.formatted_address,
-        neighbourhood:
-          (eachData.location.neighborhood &&
-            eachData.location.neighborhood[0]) ||
-          "",
-        imgUrl:
-          "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        // websiteUrl:
-      };
-    });
-    // console.log({ formattedData });
-  }
-
+  const formattedData = await fetchStore();
   return {
     props: { storeData: formattedData }, // will be passed to the page component as props
   };
