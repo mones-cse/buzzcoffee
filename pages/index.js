@@ -4,18 +4,41 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/banner";
 import Card from "../components/card";
 import { fetchStore } from "../lib/coffee-store";
+import { useTrackLocation } from "../hooks/use-track-location";
+import { useEffect, useState } from "react";
 
 export async function getStaticProps(context) {
-  const formattedData = await fetchStore();
+  const formattedData = await fetchStore("23.73,90.37", 6);
   return {
     props: { storeData: formattedData }, // will be passed to the page component as props
   };
 }
 
 export default function Home(props) {
+  const [storesNearMe, setStoresNearMe] = useState([]);
+  const { handleTrack, latLong, locationErrorMsg, isFindingLocation } =
+    useTrackLocation();
+
   const handleOnButtonClick = () => {
-    console.log("hi button click");
+    handleTrack();
   };
+
+  useEffect(() => {
+    console.log("latLong", latLong);
+    console.log("error", locationErrorMsg);
+
+    async function setCoffeeStoresByLocation() {
+      if (latLong) {
+        // code
+        const stores = await fetchStore(latLong, 30);
+        setStoresNearMe(stores);
+        console.log({ stores });
+      }
+    }
+
+    setCoffeeStoresByLocation();
+  }, [latLong, locationErrorMsg]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -32,22 +55,48 @@ export default function Home(props) {
           />
         </div>
         <Banner
-          buttonText={"View Store Nearby"}
+          buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
-        <div className={styles.cardLayout}>
-          {props.storeData.map((each) => {
-            return (
-              <Card
-                className={styles.card}
-                title={each.name}
-                imgUrl={each.imgUrl}
-                url={each.id}
-                key={each.id}
-              />
-            );
-          })}
-        </div>
+
+        {storesNearMe.length > 0 && (
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Stores near me</h2>
+            <div className={styles.cardLayout}>
+              {storesNearMe.length > 0 &&
+                storesNearMe.map((each) => {
+                  return (
+                    <Card
+                      className={styles.card}
+                      title={each.name}
+                      imgUrl={each.imgUrl}
+                      url={each.id}
+                      key={each.id}
+                    />
+                  );
+                })}
+            </div>
+          </div>
+        )}
+
+        {props.storeData.length > 0 && (
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Dhaka stores</h2>
+            <div className={styles.cardLayout}>
+              {props.storeData.map((each) => {
+                return (
+                  <Card
+                    className={styles.card}
+                    title={each.name}
+                    imgUrl={each.imgUrl}
+                    url={each.id}
+                    key={each.id}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
