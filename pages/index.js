@@ -6,6 +6,8 @@ import Card from "../components/card";
 import { fetchStore } from "../lib/coffee-store";
 import { useTrackLocation } from "../hooks/use-track-location";
 import { useEffect, useState } from "react";
+import { StoreContext } from "../context/store-context";
+import { useContext } from "react";
 
 export async function getStaticProps(context) {
   const formattedData = await fetchStore("23.73,90.37", 6);
@@ -18,7 +20,7 @@ export default function Home(props) {
   const [storesNearMe, setStoresNearMe] = useState([]);
   const { handleTrack, latLong, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
-
+  const ctx = useContext(StoreContext);
   const handleOnButtonClick = () => {
     handleTrack();
   };
@@ -58,6 +60,7 @@ export default function Home(props) {
           buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
+        <p>Testing count {ctx.state.count}</p>
 
         {storesNearMe.length > 0 && (
           <div className={styles.sectionWrapper}>
