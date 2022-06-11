@@ -72,18 +72,6 @@ export default function Home(props) {
           buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
-        <button
-          style={{
-            backgroundColor: "wheat",
-            height: "5rem",
-            cursor: "pointer",
-          }}
-          type={"button"}
-          onClick={handleIncrementCount}
-        >
-          Increment
-        </button>
-        <p>Testing count {ctx.state.count}</p>
 
         {state.stores.length > 0 && (
           <div className={styles.sectionWrapper}>

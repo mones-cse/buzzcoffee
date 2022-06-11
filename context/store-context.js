@@ -11,7 +11,6 @@ export const ACTION_TYPE = {
 const initialValue = {
   latLong: "",
   stores: [],
-  count: 0,
 };
 
 const storeReducer = (state, action) => {
@@ -21,10 +20,6 @@ const storeReducer = (state, action) => {
     case ACTION_TYPE.SET_STORE:
       console.log("update store", action.payload);
       return { ...state, stores: action.payload };
-    case ACTION_TYPE.INCREMENT_COUNT:
-      console.log("increment called");
-      const updatedCount = state.count + action.payload;
-      return { ...state, count: updatedCount };
     default:
       console.log("something went wrong");
   }

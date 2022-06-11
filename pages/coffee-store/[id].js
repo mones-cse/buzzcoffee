@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,15 +6,19 @@ import Head from "next/head";
 import style from "./coffee-store.module.css";
 import className from "classnames";
 import { fetchStore } from "../../lib/coffee-store";
+import { StoreContext } from "../../context/store-context";
 
 export async function getStaticProps({ params }) {
   const formattedData = await fetchStore("23.73,90.37", 6);
-  const store = formattedData.find((eachStore) => eachStore.id == params.id);
-  return { props: { store } };
+  const findCoffeeStoreById = formattedData.find(
+    (eachStore) => eachStore.id.toString() == params.id
+  );
+
+  return { props: { store: findCoffeeStoreById ? findCoffeeStoreById : {} } };
 }
 
 export async function getStaticPaths() {
-  const formattedData = await fetchStore();
+  const formattedData = await fetchStore("23.73,90.37", 6);
   const paths = formattedData.map((each) => {
     return {
       params: {
@@ -22,28 +26,51 @@ export async function getStaticPaths() {
       },
     };
   });
-  console.log({ paths });
   return {
     paths,
     fallback: true,
   };
 }
 
-const CoffeeStore = ({ store }) => {
-  const { name, address, neighbourhood, imgUrl } = store;
+const handleUpvoteButton = () => {
+  console.log("handle up vote");
+};
+
+const CoffeeStore = (initialProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [store, setStore] = useState(initialProps.store || {});
+  const ctx = useContext(StoreContext);
   const router = useRouter();
-  if (router.isFallback == true) {
-    return <div>Loading....</div>;
+  const { id } = router.query;
+
+  useEffect(() => {
+    if (initialProps && initialProps.store) {
+      if (Object.keys(store).length == 0) {
+        console.log(
+          "no match found need to find result by ourself",
+          ctx.state.stores
+        );
+        const temp = ctx.state.stores.find((each) => each.id === id);
+        setStore(temp);
+        setIsLoading(false);
+      } else {
+        console.log("found the match");
+        setStore(initialProps.store);
+        setIsLoading(false);
+      }
+    }
+  }, [initialProps.store]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-  const handleUpvoteButton = () => {
-    console.log("0000");
-  };
 
   return (
     <div>
       <Head>
-        <title>{name}</title>
+        <title>{(store && store.name) || "Demo Name"}</title>
       </Head>
+
       <div className={style.container}>
         <div className={style.col1}>
           <div className={style.backToHomeLink}>
@@ -52,12 +79,12 @@ const CoffeeStore = ({ store }) => {
             </Link>
           </div>
           <div className={style.nameWrapper}>
-            <h2>{name}</h2>
+            <h2>{(store && store.name) || "Demo Name"}</h2>
           </div>
 
           <Image
             src={
-              imgUrl ||
+              (store && store.imgUrl) ||
               "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
             }
             className={style.storeImg}
@@ -75,9 +102,9 @@ const CoffeeStore = ({ store }) => {
               height={24}
               alt={"place icon"}
             />
-            <p className={style.tex}>{address}</p>
+            <p className={style.tex}>{store && store.address}</p>
           </div>
-          {neighbourhood && (
+          {store && store.neighbourhood && (
             <div className={style.iconWrapper}>
               <Image
                 src={"/static/icons/nearMe.svg"}
@@ -85,7 +112,7 @@ const CoffeeStore = ({ store }) => {
                 height={24}
                 alt={"place icon"}
               />
-              <p className={style.text}>{neighbourhood}</p>
+              <p className={style.text}>{store && store.neighbourhood}</p>
             </div>
           )}
           <div className={style.iconWrapper}>
