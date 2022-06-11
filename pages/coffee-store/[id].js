@@ -8,7 +8,7 @@ import className from "classnames";
 import { fetchStore } from "../../lib/coffee-store";
 
 export async function getStaticProps({ params }) {
-  const formattedData = await fetchStore();
+  const formattedData = await fetchStore("23.73,90.37", 6);
   const store = formattedData.find((eachStore) => eachStore.id == params.id);
   return { props: { store } };
 }
