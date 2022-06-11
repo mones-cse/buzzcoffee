@@ -17,11 +17,10 @@ const initialValue = {
 const storeReducer = (state, action) => {
   switch (action.type) {
     case ACTION_TYPE.SET_LAT_LANG:
-      console.log("update lat long");
-      return state;
+      return { ...state, latLong: action.payload };
     case ACTION_TYPE.SET_STORE:
-      console.log("update store");
-      return state;
+      console.log("update store", action.payload);
+      return { ...state, stores: action.payload };
     case ACTION_TYPE.INCREMENT_COUNT:
       console.log("increment called");
       const updatedCount = state.count + action.payload;

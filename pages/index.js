@@ -19,29 +19,31 @@ export async function getStaticProps(context) {
 
 export default function Home(props) {
   const [storesNearMe, setStoresNearMe] = useState([]);
-  const { handleTrack, latLong, locationErrorMsg, isFindingLocation } =
-    useTrackLocation();
   const ctx = useContext(StoreContext);
-  console.log({ ctx });
+  const { state, dispatch } = ctx;
+  const { handleTrack, locationErrorMsg, isFindingLocation } =
+    useTrackLocation(dispatch);
+
   const handleOnButtonClick = () => {
     handleTrack();
   };
 
   useEffect(() => {
-    console.log("latLong", latLong);
+    console.log("latLong", state.latLong);
     console.log("error", locationErrorMsg);
 
     async function setCoffeeStoresByLocation() {
-      if (latLong) {
+      if (state.latLong.length > 0) {
         // code
-        const stores = await fetchStore(latLong, 30);
-        setStoresNearMe(stores);
+        const stores = await fetchStore(state.latLong, 30);
+        // setStoresNearMe(stores);
+        dispatch({ type: ACTION_TYPE.SET_STORE, payload: stores });
         console.log({ stores });
       }
     }
 
     setCoffeeStoresByLocation();
-  }, [latLong, locationErrorMsg]);
+  }, [state.latLong, locationErrorMsg]);
 
   const handleIncrementCount = () => {
     console.log("increment count");
@@ -83,22 +85,21 @@ export default function Home(props) {
         </button>
         <p>Testing count {ctx.state.count}</p>
 
-        {storesNearMe.length > 0 && (
+        {state.stores.length > 0 && (
           <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Stores near me</h2>
             <div className={styles.cardLayout}>
-              {storesNearMe.length > 0 &&
-                storesNearMe.map((each) => {
-                  return (
-                    <Card
-                      className={styles.card}
-                      title={each.name}
-                      imgUrl={each.imgUrl}
-                      url={each.id}
-                      key={each.id}
-                    />
-                  );
-                })}
+              {state.stores.map((each) => {
+                return (
+                  <Card
+                    className={styles.card}
+                    title={each.name}
+                    imgUrl={each.imgUrl}
+                    url={each.id}
+                    key={each.id}
+                  />
+                );
+              })}
             </div>
           </div>
         )}

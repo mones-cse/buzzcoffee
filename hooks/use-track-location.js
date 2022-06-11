@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { ACTION_TYPE } from "../context/store-context";
 
-export const useTrackLocation = () => {
-  const [latLong, setLatLong] = useState("");
+export const useTrackLocation = (dispatch) => {
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
   const [isFindingLocation, setIsFindingLocation] = useState(false);
 
   const success = (position) => {
-    console.log(position.coords.latitude, position.coords.longitude);
-    setLatLong(position.coords.latitude + "," + position.coords.longitude);
+    dispatch({
+      type: ACTION_TYPE.SET_LAT_LANG,
+      payload: position.coords.latitude + "," + position.coords.longitude,
+    });
     setLocationErrorMsg("");
     setIsFindingLocation(false);
   };
@@ -18,19 +20,16 @@ export const useTrackLocation = () => {
     setIsFindingLocation(false);
   };
   const handleTrack = () => {
-    console.log("handle Track called");
     setIsFindingLocation(true);
     const options = {
       enableHighAccuracy: true,
-      // maximumAge: 30000,
-      // timeout: 27000,
     };
     navigator.geolocation.watchPosition(success, error, options);
   };
 
   return {
     handleTrack,
-    latLong,
+    // latLong,
     locationErrorMsg,
     isFindingLocation,
   };
