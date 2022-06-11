@@ -8,6 +8,7 @@ import { useTrackLocation } from "../hooks/use-track-location";
 import { useEffect, useState } from "react";
 import { StoreContext } from "../context/store-context";
 import { useContext } from "react";
+import { ACTION_TYPE } from "../context/store-context";
 
 export async function getStaticProps(context) {
   const formattedData = await fetchStore("23.73,90.37", 6);
@@ -21,6 +22,7 @@ export default function Home(props) {
   const { handleTrack, latLong, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
   const ctx = useContext(StoreContext);
+  console.log({ ctx });
   const handleOnButtonClick = () => {
     handleTrack();
   };
@@ -41,6 +43,14 @@ export default function Home(props) {
     setCoffeeStoresByLocation();
   }, [latLong, locationErrorMsg]);
 
+  const handleIncrementCount = () => {
+    console.log("increment count");
+    ctx.dispatch({
+      type: ACTION_TYPE.INCREMENT_COUNT,
+      payload: 2,
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -60,6 +70,17 @@ export default function Home(props) {
           buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
           handleOnClick={handleOnButtonClick}
         />
+        <button
+          style={{
+            backgroundColor: "wheat",
+            height: "5rem",
+            cursor: "pointer",
+          }}
+          type={"button"}
+          onClick={handleIncrementCount}
+        >
+          Increment
+        </button>
         <p>Testing count {ctx.state.count}</p>
 
         {storesNearMe.length > 0 && (
