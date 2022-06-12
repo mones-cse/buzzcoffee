@@ -35,8 +35,12 @@ export default function Home(props) {
     async function setCoffeeStoresByLocation() {
       if (state.latLong.length > 0) {
         // code
-        const stores = await fetchStore(state.latLong, 30);
+        // const stores = await fetchStore(state.latLong, 30);
+        const response = await fetch(
+          `/api/get-coffee-store-by-id?latlong=${state.latLong}&limit=30`
+        );
         // setStoresNearMe(stores);
+        const stores = await response.json();
         dispatch({ type: ACTION_TYPE.SET_STORE, payload: stores });
         console.log({ stores });
       }
