@@ -29,7 +29,6 @@ export const useTrackLocation = (dispatch) => {
 
   return {
     handleTrack,
-    // latLong,
     locationErrorMsg,
     isFindingLocation,
   };

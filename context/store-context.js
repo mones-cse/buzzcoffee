@@ -22,6 +22,7 @@ const storeReducer = (state, action) => {
       return { ...state, stores: action.payload };
     default:
       console.log("something went wrong");
+      return { ...state };
   }
 };
 
