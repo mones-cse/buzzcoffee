@@ -43,6 +43,28 @@ const CoffeeStore = (initialProps) => {
   const router = useRouter();
   const { id } = router.query;
 
+  const createCoffeeStore = async (store) => {
+    const { id, name, voting, imgUrl, neighbourhood, address } = store;
+    const response = await fetch("/api/create-coffee-store", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+        name,
+        voting: voting || 0,
+        imgUrl,
+        neighbourhood: neighbourhood || "",
+        address: address || "",
+      }),
+    });
+    const result = await response.json();
+    setStore((store) => result);
+    setIsLoading(false);
+    return result;
+  };
+
   useEffect(() => {
     if (initialProps && initialProps.store) {
       if (Object.keys(store).length == 0) {
@@ -51,11 +73,10 @@ const CoffeeStore = (initialProps) => {
           ctx.state.stores
         );
         const temp = ctx.state.stores.find((each) => each.id === id);
-        setStore(temp);
-        setIsLoading(false);
+        createCoffeeStore({ ...temp, id: id });
       } else {
-        console.log("found the match");
         setStore(initialProps.store);
+        createCoffeeStore(initialProps.store);
         setIsLoading(false);
       }
     }

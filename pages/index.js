@@ -29,9 +29,6 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    console.log("latLong", state.latLong);
-    console.log("error", locationErrorMsg);
-
     async function setCoffeeStoresByLocation() {
       if (state.latLong.length > 0) {
         try {

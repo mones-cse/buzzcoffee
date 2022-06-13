@@ -9,7 +9,7 @@ export default async function createCoffeeStore(req, res) {
       }
       const stores = await table
         .select({
-          filterByFormula: `id=${id}`,
+          filterByFormula: `id="${id}"`,
           view: "Grid view",
         })
         .firstPage();
