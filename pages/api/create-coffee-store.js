@@ -14,15 +14,23 @@ export default async function createCoffeeStore(req, res) {
           view: "Grid view",
         })
         .firstPage();
-      console.log("---", stores);
+      // check
       if (stores.length > 0) {
         const store = stores[0].fields;
         res.status(200).json(store);
       } else {
+        //create
         console.log("create store ok!!!");
-        res
-          .status(200)
-          .json({ message: "No store with that id, create store please" });
+        const createdStore = await table.create({
+          id: "0017",
+          name: "demo name",
+          address: "demo address",
+          neighbourhood: "demo neighbourhood",
+          vote: 100,
+          imgUrl: "https://picsum.photos/200",
+        });
+        console.log({ createdStore });
+        res.status(200).json(createdStore.fields);
       }
     } catch (error) {
       res.status(500).json({ message: error.message });
