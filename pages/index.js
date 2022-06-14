@@ -18,7 +18,6 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
-  const [storesNearMe, setStoresNearMe] = useState([]);
   const ctx = useContext(StoreContext);
   const { state, dispatch } = ctx;
   const { handleTrack, locationErrorMsg, isFindingLocation } =
@@ -38,21 +37,13 @@ export default function Home(props) {
           const stores = await response.json();
           dispatch({ type: ACTION_TYPE.SET_STORE, payload: stores });
         } catch (error) {
-          console.log("error at index" + error.message);
+          console.log("error at index page" + error.message);
         }
       }
     }
 
     setCoffeeStoresByLocation();
   }, [state.latLong, locationErrorMsg]);
-
-  const handleIncrementCount = () => {
-    console.log("increment count");
-    ctx.dispatch({
-      type: ACTION_TYPE.INCREMENT_COUNT,
-      payload: 2,
-    });
-  };
 
   return (
     <div className={styles.container}>

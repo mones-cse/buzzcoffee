@@ -18,10 +18,8 @@ const storeReducer = (state, action) => {
     case ACTION_TYPE.SET_LAT_LANG:
       return { ...state, latLong: action.payload };
     case ACTION_TYPE.SET_STORE:
-      // console.log("update store", action.payload);
       return { ...state, stores: action.payload };
     default:
-      console.log("something went wrong");
       return { ...state };
   }
 };

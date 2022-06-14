@@ -15,7 +15,7 @@
 }
 
 .backToHomeLink {
-    margin-top: 6rem /* 96px */;
+    margin-top: 1rem /* 96px */;
     font-size: 1.125rem /* 18px */;
     line-height: 1.75rem /* 28px */;
     margin-bottom: 0.5rem /* 8px */;
@@ -37,8 +37,9 @@
 }
 
 .storeImgWrapper {
-    padding-top: 1rem /* 16px */;
-    padding-bottom: 1rem /* 16px */;
+    width: 80vw;
+    height: 60vw;
+    position: relative
 }
 
 .storeImg {
@@ -103,6 +104,7 @@
 @media (min-width: 1024px) {
     .container {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: 100vh;
     }
 
     .layout {
@@ -113,6 +115,11 @@
 
     .col2 {
         width: 75%;
+    }
+    .storeImgWrapper {
+        width: 40vw;
+        height: 30vw;
+        position: relative
     }
 }
 

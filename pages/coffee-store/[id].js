@@ -87,10 +87,6 @@ const CoffeeStore = (initialProps) => {
   useEffect(() => {
     if (initialProps && initialProps.store) {
       if (store && Object.keys(store).length == 0) {
-        console.log(
-          "no match found need to find result by ourself",
-          ctx.state.stores
-        );
         const temp = ctx.state.stores.find((each) => each.id === id);
         createCoffeeStore({ ...temp, id: id });
       } else {
@@ -127,16 +123,18 @@ const CoffeeStore = (initialProps) => {
             <h2>{(store && store.name) || "Demo Name"}</h2>
           </div>
 
-          <Image
-            src={
-              (store && store.imgUrl) ||
-              "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-            }
-            className={style.storeImg}
-            alt={name}
-            width={600}
-            height={360}
-          />
+          <div className={style.storeImgWrapper}>
+            <Image
+              src={
+                (store && store.imgUrl) ||
+                "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+              }
+              className={style.storeImg}
+              alt={name}
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
         </div>
 
         <div className={className("glass", style.col2)}>
