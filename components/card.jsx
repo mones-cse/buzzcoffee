@@ -19,6 +19,7 @@ const Card = (props) => {
               src={props.imgUrl}
               layout="fill"
               objectFit="cover"
+              alt={"coffee image"}
             />
           </div>
         </div>

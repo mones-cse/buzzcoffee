@@ -32,7 +32,8 @@
 }
 
 .button{
-    background-color: var(--text-purple);
+    /*background-color: var(--text-purple);*/
+    background-color: rgb(19 0 255);
     cursor: pointer;
     color: white;
     outline: 0;

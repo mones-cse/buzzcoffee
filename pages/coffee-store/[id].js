@@ -12,7 +12,7 @@ import useSWR from "swr";
 export async function getStaticProps({ params }) {
   const formattedData = await fetchStore("23.73,90.37", 6);
   const findCoffeeStoreById = formattedData.find(
-    (eachStore) => eachStore.id.toString() == params.id
+    (eachStore) => eachStore.id.toString() == params.id.toString()
   );
 
   return { props: { store: findCoffeeStoreById ? findCoffeeStoreById : {} } };

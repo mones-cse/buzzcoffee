@@ -5,12 +5,12 @@ import Banner from "../components/banner";
 import Card from "../components/card";
 import { fetchStore } from "../lib/coffee-store";
 import { useTrackLocation } from "../hooks/use-track-location";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { StoreContext } from "../context/store-context";
 import { useContext } from "react";
 import { ACTION_TYPE } from "../context/store-context";
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const formattedData = await fetchStore("23.73,90.37", 6);
   return {
     props: { storeData: formattedData }, // will be passed to the page component as props
@@ -43,7 +43,7 @@ export default function Home(props) {
     }
 
     setCoffeeStoresByLocation();
-  }, [state.latLong, locationErrorMsg]);
+  }, [state.latLong, locationErrorMsg, dispatch]);
 
   return (
     <div className={styles.container}>
@@ -54,7 +54,12 @@ export default function Home(props) {
       </Head>
       <main className={styles.main}>
         <div className={styles.heroImage}>
-          <Image src={"/static/logo.svg"} width={"300px"} height={"300px"} />
+          <Image
+            src={"/static/logo.svg"}
+            width={"300px"}
+            height={"300px"}
+            alt={"logo"}
+          />
         </div>
         <Banner
           buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
