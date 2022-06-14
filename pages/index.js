@@ -54,11 +54,7 @@ export default function Home(props) {
       </Head>
       <main className={styles.main}>
         <div className={styles.heroImage}>
-          <Image
-            src={"/static/hero-image.png"}
-            width={"700px"}
-            height={"400px"}
-          />
+          <Image src={"/static/logo.svg"} width={"300px"} height={"300px"} />
         </div>
         <Banner
           buttonText={isFindingLocation ? "Loading...." : "View Store Nearby"}
