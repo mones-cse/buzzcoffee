@@ -51,11 +51,7 @@ const CoffeeStore = (initialProps) => {
       }),
     });
     const store = await response.json();
-    console.log("after upvote", store);
-    // console.log("update data with ", store);
-    // if (Object.keys(store).length > 0) {
     setStore(store);
-    // }
   };
 
   const createCoffeeStore = async (store) => {
