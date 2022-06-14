@@ -33,16 +33,30 @@ export async function getStaticPaths() {
   };
 }
 
-const handleUpvoteButton = () => {
-  console.log("handle up vote");
-};
-
 const CoffeeStore = (initialProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [store, setStore] = useState(initialProps.store || {});
   const ctx = useContext(StoreContext);
   const router = useRouter();
   const { id } = router.query;
+
+  const handleUpvoteButton = async (id) => {
+    const response = await fetch("/api/fav-coffee-store-by-id", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+      }),
+    });
+    const store = await response.json();
+    console.log("after upvote", store);
+    // console.log("update data with ", store);
+    // if (Object.keys(store).length > 0) {
+    setStore(store);
+    // }
+  };
 
   const createCoffeeStore = async (store) => {
     const { id, name, voting, imgUrl, neighbourhood, address } = store;
@@ -73,14 +87,10 @@ const CoffeeStore = (initialProps) => {
     `/api/get-coffee-store-by-id?id=${id}`,
     fetcher
   );
-  console.log({ data });
-  console.log({ error });
-
-  //
 
   useEffect(() => {
     if (initialProps && initialProps.store) {
-      if (Object.keys(store).length == 0) {
+      if (store && Object.keys(store).length == 0) {
         console.log(
           "no match found need to find result by ourself",
           ctx.state.stores
@@ -100,7 +110,7 @@ const CoffeeStore = (initialProps) => {
     setStore(data);
   }, [data]);
 
-  if (isLoading) {
+  if (isLoading || error) {
     return <div>Loading...</div>;
   }
 
@@ -164,7 +174,10 @@ const CoffeeStore = (initialProps) => {
             <p className={style.text}>{(store && store.vote) || 0}</p>
           </div>
 
-          <button className={style.upvoteButton} onClick={handleUpvoteButton}>
+          <button
+            className={style.upvoteButton}
+            onClick={() => handleUpvoteButton(id)}
+          >
             Up vote!
           </button>
         </div>
