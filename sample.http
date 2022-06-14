@@ -1,0 +1,12 @@
+### get coffee store by invalid id
+GET http://localhost:3000/api/get-coffee-store-by-id?id=WTF
+Accept: application/json
+
+### get coffee store by id (but not passing id)
+GET http://localhost:3000/api/get-coffee-store-by-id
+Accept: application/json
+
+
+### get coffee store by valid id
+GET http://localhost:3000/api/get-coffee-store-by-id?id=5067a303e4b0da4f2009f3f7
+Accept: application/json
