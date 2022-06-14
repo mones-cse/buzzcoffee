@@ -7,6 +7,7 @@ import style from "./coffee-store.module.css";
 import className from "classnames";
 import { fetchStore } from "../../lib/coffee-store";
 import { StoreContext } from "../../context/store-context";
+import useSWR from "swr";
 
 export async function getStaticProps({ params }) {
   const formattedData = await fetchStore("23.73,90.37", 6);
@@ -65,6 +66,18 @@ const CoffeeStore = (initialProps) => {
     return result;
   };
 
+  //
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, error } = useSWR(
+    `/api/get-coffee-store-by-id?id=${id}`,
+    fetcher
+  );
+  console.log({ data });
+  console.log({ error });
+
+  //
+
   useEffect(() => {
     if (initialProps && initialProps.store) {
       if (Object.keys(store).length == 0) {
@@ -81,6 +94,11 @@ const CoffeeStore = (initialProps) => {
       }
     }
   }, [initialProps.store]);
+
+  // swr update
+  useEffect(() => {
+    setStore(data);
+  }, [data]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -143,7 +161,7 @@ const CoffeeStore = (initialProps) => {
               height="24"
               alt="star icon"
             />
-            <p className={style.text}>{"votingCount"}</p>
+            <p className={style.text}>{(store && store.vote) || 0}</p>
           </div>
 
           <button className={style.upvoteButton} onClick={handleUpvoteButton}>
